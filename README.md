@@ -123,7 +123,7 @@ All attacker activity is written to `./captures/`:
 - [x] Full CVE-2026-41940 emulation flow
 - [x] Recursive disk quota enforcement
 - [x] Periodically flushed structured event logging
-- [ ] TODO: Full CI/CD (Docker image publishing, automated deployments)
+- [ ] TODO: Full CI/CD (Docker image publishing, binary builds)
 - [ ] TODO: Enhanced shell parser for `until`/`case` keywords
 - [ ] TODO: Persistent per-session shell history
 
