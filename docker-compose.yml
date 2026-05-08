@@ -1,0 +1,10 @@
+services:
+  honeypot:
+    build: .
+    ports:
+      - "2083:2083"
+      - "2087:2087"
+    volumes:
+      - ./captures:/app/captures
+      - ./data:/app/data:ro
+    restart: unless-stopped

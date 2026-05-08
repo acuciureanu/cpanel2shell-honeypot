@@ -1,0 +1,23 @@
+# Rust
+/target
+**/*.rs.bk
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Honeypot captures (runtime data)
+/captures/
+
+# Test artifacts
+*.profraw
+
+# Misc
+poc.py

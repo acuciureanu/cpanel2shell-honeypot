@@ -1,0 +1,28 @@
+[package]
+name = "cpanel2shell-honeypot"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = { version = "0.8", features = ["multipart"] }
+tokio = { version = "1", features = ["full"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+base64 = "0.22"
+rand = "0.9"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+clap = { version = "4", features = ["derive"] }
+chrono = { version = "0.4", features = ["serde"] }
+axum-server = { version = "0.7", features = ["tls-rustls"] }
+rcgen = { version = "0.13", features = ["pem", "x509-parser"] }
+rustls = { version = "0.23", features = ["ring"] }
+rustls-pemfile = "2"
+toml = "0.8"
+glob = "0.3"
+notify = "6"
+arc-swap = "1"
+shell-words = "1"
+time = { version = "0.3", features = ["parsing", "formatting", "macros"] }
