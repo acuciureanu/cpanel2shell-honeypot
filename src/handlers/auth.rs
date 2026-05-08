@@ -3,7 +3,7 @@ use std::{net::SocketAddr, sync::Arc};
 use axum::{
     extract::{ConnectInfo, State},
     http::{HeaderMap, StatusCode},
-    response::{AppendHeaders, IntoResponse, Response},
+    response::{AppendHeaders, Html, IntoResponse, Response},
 };
 use rand::Rng;
 
@@ -29,7 +29,7 @@ pub async fn handle_login(
     (
         StatusCode::OK,
         AppendHeaders([("Set-Cookie", cookie)]),
-        r#"<!DOCTYPE html>
+        Html(r#"<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -55,7 +55,7 @@ pub async fn handle_login(
         <div class="footer">Copyright &copy; 2026 cPanel, L.L.C.</div>
     </div>
 </body>
-</html>"#,
+</html>"#),
     )
 }
 
