@@ -1,0 +1,42 @@
+# TLS certificate configuration for cpanel-honeypot.
+# Pass this file with: --certs-config data/certs.toml
+#
+# Hot-reload: edit this file while the server is running; changes take effect
+# within ~500ms without a restart.
+
+# Default behaviour for any SNI that doesn't match a [[host]] entry.
+# "auto" = generate a self-signed cert on-demand and cache it.
+# "none" = reject connections with no matching SNI (useful in strict environments).
+default = "auto"
+
+# ── Global auto-generation defaults ───────────────────────────────────────────
+[auto]
+cache_dir      = "./captures/certs"   # disk cache for generated certs
+key_type       = "ecdsa-p256"         # rsa-2048 | rsa-4096 | ecdsa-p256 | ed25519
+validity_days  = 365
+issuer_cn      = "Let's Encrypt Authority X3"   # spoof issuer for realism
+
+# ── Per-host entries (optional) ────────────────────────────────────────────────
+# Uncomment and edit as needed.
+
+# Pinned cert/key from files:
+# [[host]]
+# sni           = "cpanel.example.com"
+# cert          = "/etc/honeypot/certs/cpanel.pem"
+# key           = "/etc/honeypot/certs/cpanel.key"
+
+# Auto-generated with custom SANs and issuer:
+# [[host]]
+# sni           = "*.example.com"
+# mode          = "auto"
+# sans          = ["mail.example.com", "ftp.example.com"]
+# validity_days = 730
+# key_type      = "rsa-2048"
+# issuer_cn     = "DigiCert SHA2 Secure Server CA"
+# not_before    = "2024-01-15"          # backdate for realism
+
+# Another auto-generated entry:
+# [[host]]
+# sni           = "whm.example.com"
+# mode          = "auto"
+# issuer_cn     = "Sectigo RSA Domain Validation Secure Server CA"
