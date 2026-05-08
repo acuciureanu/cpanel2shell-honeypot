@@ -106,6 +106,7 @@ impl VfsError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Vfs {
     pub root: Inode,
+    #[serde(default)]
     pub total_bytes: usize,
     #[serde(default = "crate::limits::default_max_vfs_bytes")]
     pub max_bytes: usize,
