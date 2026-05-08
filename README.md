@@ -1,6 +1,12 @@
 # cPanel2Shell Honeypot
 
+![cPanel2Shell Honeypot Banner](assets/banner.png)
+
 A Rust honeypot that simulates a vulnerable cPanel/WHM instance for CVE-2026-41940 (cPanel2Shell authentication bypass).
+
+## Interface
+
+![Captured Session Screenshot](assets/screenshot.png)
 
 ## Overview
 
