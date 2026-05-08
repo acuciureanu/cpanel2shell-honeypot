@@ -31,12 +31,6 @@ pub async fn handle_terminal(
         return (StatusCode::TOO_MANY_REQUESTS, "Rate limit exceeded").into_response();
     }
 
-    // Disk quota check
-    if !crate::limits::check_disk_quota(config.max_captures_disk_mb).await {
-        tracing::warn!("[{}] Disk quota exceeded, rejecting terminal command from {}", config.port, remote);
-        return (StatusCode::SERVICE_UNAVAILABLE, "Server busy").into_response();
-    }
-
     log_request(&config, EventType::Command, remote, "POST", path, &headers, None).await;
 
     let bytes = match to_bytes(body, DEFAULT_MAX_POST_BODY).await {

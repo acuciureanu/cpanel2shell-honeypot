@@ -55,7 +55,7 @@ async fn async_main() {
     // Load persisted sessions.
     if !args.no_session_persist {
         sessions::load_sessions(&shared_sessions, args.session_ttl_days).await;
-        sessions::start_flush_task(shared_sessions.clone(), Duration::from_secs(5), args.max_captures_disk_mb);
+        sessions::start_flush_task(shared_sessions.clone(), Duration::from_secs(5));
     }
 
     let tls_config = if !args.no_tls {
@@ -73,7 +73,7 @@ async fn async_main() {
     };
 
     // Initialize event logger
-    let event_log = match crate::events::EventLogger::new(&args.event_log).await {
+    let event_log = match crate::events::EventLogger::new("captures/events.jsonl").await {
         Ok(logger) => {
             info!("Event logging enabled: captures/events.jsonl");
             let logger_arc = Arc::new(logger);
@@ -109,7 +109,6 @@ async fn async_main() {
             max_sessions: args.max_sessions,
             max_vfs_bytes: args.max_vfs_mb * 1024 * 1024,
             rate_limit: args.rate_limit,
-            max_captures_disk_mb: args.max_captures_disk_mb,
         });
         let router = make_router(config);
         let addr = format!("{}:{}", args.bind, port);

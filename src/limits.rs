@@ -14,6 +14,8 @@ pub fn default_max_vfs_bytes() -> usize {
     DEFAULT_MAX_VFS_BYTES_PER_SESSION
 }
 
+/// Maximum disk usage for captures in MB (5 GB).
+pub const MAX_CAPTURES_DISK_MB: u64 = 5_000;
 
 
 
@@ -52,31 +54,25 @@ pub async fn check_rate_limit(config: &crate::config::AppConfig, ip: IpAddr) -> 
 }
 
 /// Check if the captures directory is within disk quota.
-pub async fn check_disk_quota(max_mb: u64) -> bool {
+pub async fn check_disk_quota() -> bool {
     let captures_dir = std::path::Path::new(crate::config::CAPTURES_DIR);
     if !captures_dir.exists() {
         return true;
     }
     match dir_size_mb(captures_dir).await {
-        Ok(size) => size < max_mb,
+        Ok(size) => size < MAX_CAPTURES_DISK_MB,
         Err(_) => true, // If we can't check, allow it
     }
 }
 
-/// Calculate directory size in bytes recursively.
+/// Calculate directory size in MB (non-recursive, just top-level files).
 async fn dir_size_mb(path: &std::path::Path) -> Result<u64, std::io::Error> {
     let mut total = 0u64;
-    let mut stack = vec![path.to_path_buf()];
-
-    while let Some(current_path) = stack.pop() {
-        let mut entries = tokio::fs::read_dir(current_path).await?;
-        while let Ok(Some(entry)) = entries.next_entry().await {
-            let meta = entry.metadata().await?;
-            if meta.is_file() {
-                total += meta.len();
-            } else if meta.is_dir() {
-                stack.push(entry.path());
-            }
+    let mut entries = tokio::fs::read_dir(path).await?;
+    while let Ok(Some(entry)) = entries.next_entry().await {
+        let meta = entry.metadata().await?;
+        if meta.is_file() {
+            total += meta.len();
         }
     }
     Ok(total / (1024 * 1024))

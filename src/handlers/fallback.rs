@@ -65,12 +65,6 @@ pub async fn handle_raw_post(
     body: axum::body::Body,
 ) -> Response {
     let path = uri.path();
-
-    // Disk quota check
-    if !crate::limits::check_disk_quota(config.max_captures_disk_mb).await {
-        return (StatusCode::SERVICE_UNAVAILABLE, "Server busy").into_response();
-    }
-
     log_request(&config, EventType::RawPost, remote, "POST", path, &headers, None).await;
 
     let bytes = match to_bytes(body, DEFAULT_MAX_POST_BODY).await {
