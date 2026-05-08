@@ -111,8 +111,10 @@ impl EventLogger {
 
         Ok(())
     }
-
-
+    pub async fn flush(&self) -> Result<(), std::io::Error> {
+        let mut file = self.file.lock().await;
+        file.flush().await
+    }
 }
 
 /// Shared event logger handle.

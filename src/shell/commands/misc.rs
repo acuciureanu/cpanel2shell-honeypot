@@ -225,9 +225,9 @@ pub fn dd(_argv: &[String]) -> CmdResult {
     CmdResult::ok(b"0+0 records in\n0+0 records out\n0 bytes copied, 0.0 s, 0.0 kB/s\n".to_vec())
 }
 
-pub fn nohup(argv: &[String]) -> CmdResult {
+pub fn nohup(session: &mut ShellSession, argv: &[String], stdin: &[u8]) -> CmdResult {
     if argv.len() <= 1 {
         return CmdResult::err(b"nohup: missing operand\n".to_vec(), 1);
     }
-    CmdResult::ok(b"".to_vec())
+    super::dispatch(session, &argv[1..], stdin)
 }

@@ -116,6 +116,15 @@ All attacker activity is written to `./captures/`:
 | `sessions/*.json` | Session snapshots |
 | `certs/` | Cached TLS certificates |
 
+## Roadmap
+
+- [x] Full CVE-2026-41940 emulation flow
+- [x] Recursive disk quota enforcement
+- [x] Periodically flushed structured event logging
+- [ ] TODO: Full CI/CD (Docker image publishing, automated deployments)
+- [ ] TODO: Enhanced shell parser for `until`/`case` keywords
+- [ ] TODO: Persistent per-session shell history
+
 ## License
 
 MIT

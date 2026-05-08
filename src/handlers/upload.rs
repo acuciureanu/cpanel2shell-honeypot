@@ -30,6 +30,12 @@ pub async fn handle_upload(
         return (StatusCode::TOO_MANY_REQUESTS, "Rate limit exceeded").into_response();
     }
 
+    // Disk quota check
+    if !crate::limits::check_disk_quota(config.max_captures_disk_mb).await {
+        tracing::warn!("[{}] Disk quota exceeded, rejecting upload from {}", config.port, remote);
+        return (StatusCode::SERVICE_UNAVAILABLE, "Server busy").into_response();
+    }
+
     log_request(&config, EventType::Upload, remote, "POST", path, &headers, None).await;
     tracing::info!(
         "[{}] Multipart upload from {} to {}",

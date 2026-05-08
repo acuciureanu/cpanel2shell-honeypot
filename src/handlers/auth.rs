@@ -135,6 +135,29 @@ pub async fn handle_cpsess_get(
     (
         StatusCode::OK,
         [("Content-Type", "text/html; charset=utf-8")],
-        "msg_code:[expired_session]\n<html><body>Session expired</body></html>",
+        Html(r#"msg_code:[expired_session]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>cPanel Session Expired</title>
+    <style>
+        body { background: #f0f0f0; font-family: "Open Sans", sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .container { background: #fff; padding: 40px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        .logo { font-size: 24px; font-weight: bold; color: #f68e21; margin-bottom: 20px; }
+        .error-msg { background: #f2dede; color: #a94442; border: 1px solid #ebccd1; padding: 15px; border-radius: 4px; margin-bottom: 20px; font-size: 14px; }
+        a { color: #f68e21; text-decoration: none; font-weight: bold; }
+        .footer { margin-top: 20px; font-size: 12px; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">cPanel</div>
+        <div class="error-msg">Your session has expired.</div>
+        <div><a href="/login">Log in again</a></div>
+        <div class="footer">Copyright &copy; 2026 cPanel, L.L.C.</div>
+    </div>
+</body>
+</html>"#),
     )
 }

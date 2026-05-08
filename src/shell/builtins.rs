@@ -24,6 +24,7 @@ pub fn is_builtin(name: &str) -> bool {
             | "["
             | "type"
             | "command"
+            | "exec"
             | ":"
             | "source"
             | "."
@@ -51,12 +52,19 @@ pub fn run(session: &mut ShellSession, argv: &[String], stdin: &[u8]) -> Option<
         "test" | "[" => Some(test(session, argv)),
         "type" => Some(type_builtin(session, argv)),
         "command" => {
-            // `command foo args` => bypass aliases; we just strip and re-dispatch
             if argv.len() > 1 {
                 let rest: Vec<String> = argv[1..].to_vec();
                 Some(super::commands::dispatch_with_alias(
                     session, &rest, stdin, false,
                 ))
+            } else {
+                Some(CmdResult::empty())
+            }
+        }
+        "exec" => {
+            if argv.len() > 1 {
+                let rest: Vec<String> = argv[1..].to_vec();
+                Some(super::commands::dispatch(session, &rest, stdin))
             } else {
                 Some(CmdResult::empty())
             }
@@ -281,6 +289,10 @@ fn test(session: &ShellSession, argv: &[String]) -> CmdResult {
         [a, "!=", b] => a != b,
         [a, "-eq", b] => a.parse::<i64>().ok() == b.parse::<i64>().ok(),
         [a, "-ne", b] => a.parse::<i64>().ok() != b.parse::<i64>().ok(),
+        [a, "-gt", b] => a.parse::<i64>().unwrap_or(0) > b.parse::<i64>().unwrap_or(0),
+        [a, "-ge", b] => a.parse::<i64>().unwrap_or(0) >= b.parse::<i64>().unwrap_or(0),
+        [a, "-lt", b] => a.parse::<i64>().unwrap_or(0) < b.parse::<i64>().unwrap_or(0),
+        [a, "-le", b] => a.parse::<i64>().unwrap_or(0) <= b.parse::<i64>().unwrap_or(0),
         _ => false,
     };
     if ok {

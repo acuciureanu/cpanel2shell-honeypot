@@ -56,4 +56,8 @@ pub struct Args {
     /// Path to JSONL event log file (default: captures/events.jsonl)
     #[arg(long, default_value = "captures/events.jsonl")]
     pub event_log: String,
+
+    /// Maximum disk usage for captures in MB (default: 5000)
+    #[arg(long, default_value = "5000")]
+    pub max_captures_disk_mb: u64,
 }

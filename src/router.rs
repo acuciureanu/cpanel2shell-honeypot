@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use axum::{
+    http::StatusCode,
     middleware,
     routing::{get, post},
     Router,
@@ -21,6 +22,8 @@ use crate::{
 /// Constructs the full Axum router for a single honeypot port instance.
 pub fn make_router(config: Arc<AppConfig>) -> Router {
     Router::new()
+        // ── Favicon (reduce 404 noise) ──────────────────────────────────
+        .route("/favicon.ico", get(|| async { StatusCode::NO_CONTENT }))
         // ── Authentication flow (scanner compatibility) ──────────────────
         .route("/login", get(handle_login))
         .route("/", get(handle_root))

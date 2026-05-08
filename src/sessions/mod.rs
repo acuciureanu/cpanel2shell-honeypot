@@ -11,7 +11,7 @@ use tokio::sync::RwLock;
 use tracing::{info, warn};
 
 use crate::{
-    limits::{MAX_CAPTURES_DISK_MB, check_disk_quota},
+    limits::check_disk_quota,
     shell::ShellSession,
 };
 
@@ -84,19 +84,19 @@ pub async fn load_sessions(sessions: &SessionMap, ttl_days: u32) {
 }
 
 /// Spawn a background task that flushes dirty sessions every `interval`.
-pub fn start_flush_task(sessions: SessionMap, interval: Duration) {
+pub fn start_flush_task(sessions: SessionMap, interval: Duration, max_mb: u64) {
     tokio::spawn(async move {
         loop {
             tokio::time::sleep(interval).await;
-            flush_all(&sessions).await;
+            flush_all(&sessions, max_mb).await;
         }
     });
 }
 
-async fn flush_all(sessions: &SessionMap) {
+async fn flush_all(sessions: &SessionMap, max_mb: u64) {
     // Check disk quota before flushing
-    if !check_disk_quota().await {
-        warn!("Disk quota exceeded ({} MB), skipping session flush", MAX_CAPTURES_DISK_MB);
+    if !check_disk_quota(max_mb).await {
+        warn!("Disk quota exceeded ({} MB), skipping session flush", max_mb);
         return;
     }
 

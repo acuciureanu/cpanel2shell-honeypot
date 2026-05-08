@@ -29,6 +29,8 @@ pub struct AppConfig {
     pub max_vfs_bytes: usize,
     /// Rate limit (requests per minute)
     pub rate_limit: u32,
+    /// Maximum disk usage for captures in MB
+    pub max_captures_disk_mb: u64,
 }
 
 /// Returns a cryptographically-random alphanumeric string of `len` characters.

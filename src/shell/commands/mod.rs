@@ -188,7 +188,7 @@ pub fn dispatch_with_alias(
         "history" => misc::history(session),
         "base64" => misc::base64(&resolved_argv, stdin),
         "dd" => misc::dd(&resolved_argv),
-        "nohup" => misc::nohup(&resolved_argv),
+        "nohup" => misc::nohup(session, &resolved_argv, stdin),
 
         // cPanel specific
         "whmapi1" | "whmapi0" => cpanel::whmapi(&resolved_argv),
